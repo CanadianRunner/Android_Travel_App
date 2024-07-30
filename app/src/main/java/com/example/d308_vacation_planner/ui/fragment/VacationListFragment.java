@@ -9,12 +9,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import com.example.d308_vacation_planner.MainActivity;
 import com.example.d308_vacation_planner.R;
 import com.example.d308_vacation_planner.model.Vacation;
 import com.example.d308_vacation_planner.ui.adapter.VacationAdapter;
 import com.example.d308_vacation_planner.viewmodel.VacationViewModel;
-
 import java.util.List;
 
 public class VacationListFragment extends Fragment {
@@ -40,6 +39,10 @@ public class VacationListFragment extends Fragment {
             public void onChanged(List<Vacation> vacations) {
                 adapter.setVacations(vacations);
             }
+        });
+
+        adapter.setOnItemClickListener(vacation -> {
+            ((MainActivity) getActivity()).navigateToVacationDetails(vacation);
         });
 
         return view;

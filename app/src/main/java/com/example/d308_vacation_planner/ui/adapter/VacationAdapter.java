@@ -19,6 +19,7 @@ public class VacationAdapter extends RecyclerView.Adapter<VacationAdapter.Vacati
 
     private List<Vacation> vacations = new ArrayList<>();
     private VacationViewModel vacationViewModel;
+    private OnItemClickListener listener;
 
     @NonNull
     @Override
@@ -43,6 +44,12 @@ public class VacationAdapter extends RecyclerView.Adapter<VacationAdapter.Vacati
         holder.buttonEdit.setOnClickListener(v -> {
             ((MainActivity) holder.itemView.getContext()).navigateToUpdateVacation(currentVacation);
         });
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null && position != RecyclerView.NO_POSITION) {
+                listener.onItemClick(currentVacation);
+            }
+        });
     }
 
     @Override
@@ -57,6 +64,14 @@ public class VacationAdapter extends RecyclerView.Adapter<VacationAdapter.Vacati
 
     public void setVacationViewModel(VacationViewModel vacationViewModel) {
         this.vacationViewModel = vacationViewModel;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Vacation vacation);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 
     static class VacationHolder extends RecyclerView.ViewHolder {

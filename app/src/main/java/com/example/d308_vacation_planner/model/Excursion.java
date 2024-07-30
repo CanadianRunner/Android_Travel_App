@@ -2,9 +2,10 @@ package com.example.d308_vacation_planner.model;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import java.io.Serializable;
 
 @Entity(tableName = "excursion_table")
-public class Excursion {
+public class Excursion implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     private int id;

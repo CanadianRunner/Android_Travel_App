@@ -9,12 +9,12 @@ import com.example.d308_vacation_planner.model.Vacation;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Vacation.class, Excursion.class}, version = 2)
+@Database(entities = {Vacation.class, Excursion.class}, version = 3)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static volatile AppDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
-    public static final ExecutorService databaseWriteExecutor = // Change from 'private' to 'public'
+    public static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
     public abstract VacationDao vacationDao();
