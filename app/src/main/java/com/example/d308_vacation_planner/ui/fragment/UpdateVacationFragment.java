@@ -1,5 +1,6 @@
 package com.example.d308_vacation_planner.ui.fragment;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,17 +11,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.d308_vacation_planner.R;
 import com.example.d308_vacation_planner.model.Vacation;
 import com.example.d308_vacation_planner.viewmodel.VacationViewModel;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 public class UpdateVacationFragment extends Fragment {
 
     private static final String ARG_VACATION = "arg_vacation";
+    private static final String DATE_FORMAT = "MM/dd/yy";
+
     private Vacation vacation;
     private VacationViewModel vacationViewModel;
     private EditText editTextTitle, editTextHotel, editTextStartDate, editTextEndDate;
+    private Button buttonSave;
 
     public static UpdateVacationFragment newInstance(Vacation vacation) {
         UpdateVacationFragment fragment = new UpdateVacationFragment();
@@ -43,28 +54,101 @@ public class UpdateVacationFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_update_vacation, container, false);
 
+        initializeViews(view);
+        populateFields();
+        vacationViewModel = new ViewModelProvider(this).get(VacationViewModel.class);
+        buttonSave.setOnClickListener(v -> saveVacation());
+        setupDatePickers();
+        return view;
+    }
+
+    private void initializeViews(View view) {
         editTextTitle = view.findViewById(R.id.edit_text_title);
         editTextHotel = view.findViewById(R.id.edit_text_hotel);
         editTextStartDate = view.findViewById(R.id.edit_text_start_date);
         editTextEndDate = view.findViewById(R.id.edit_text_end_date);
-        Button buttonSave = view.findViewById(R.id.button_save);
+        buttonSave = view.findViewById(R.id.button_save);
+    }
 
-        editTextTitle.setText(vacation.getTitle());
-        editTextHotel.setText(vacation.getHotel());
-        editTextStartDate.setText(vacation.getStartDate());
-        editTextEndDate.setText(vacation.getEndDate());
+    private void populateFields() {
+        if (vacation != null) {
+            editTextTitle.setText(vacation.getTitle());
+            editTextHotel.setText(vacation.getHotel());
+            editTextStartDate.setText(vacation.getStartDate());
+            editTextEndDate.setText(vacation.getEndDate());
+        }
+    }
 
-        vacationViewModel = new ViewModelProvider(this).get(VacationViewModel.class);
+    private void saveVacation() {
+        String title = editTextTitle.getText().toString().trim();
+        String hotel = editTextHotel.getText().toString().trim();
+        String startDate = editTextStartDate.getText().toString().trim();
+        String endDate = editTextEndDate.getText().toString().trim();
 
-        buttonSave.setOnClickListener(v -> {
-            vacation.setTitle(editTextTitle.getText().toString());
-            vacation.setHotel(editTextHotel.getText().toString());
-            vacation.setStartDate(editTextStartDate.getText().toString());
-            vacation.setEndDate(editTextEndDate.getText().toString());
+        if (!areFieldsValid(title, hotel, startDate, endDate)) {
+            return;
+        }
+        if (vacation == null) {
+            vacation = new Vacation(title, startDate, endDate, hotel);
+            vacationViewModel.insert(vacation);
+        } else {
+            vacation.setTitle(title);
+            vacation.setHotel(hotel);
+            vacation.setStartDate(startDate);
+            vacation.setEndDate(endDate);
             vacationViewModel.update(vacation);
-            getActivity().onBackPressed();
-        });
+        }
 
-        return view;
+        getActivity().onBackPressed();
+    }
+
+    private boolean areFieldsValid(String title, String hotel, String startDate, String endDate) {
+        if (title.isEmpty() || hotel.isEmpty() || startDate.isEmpty() || endDate.isEmpty()) {
+            Toast.makeText(getContext(), "Please fill out all fields!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (!isValidDateRange(startDate, endDate)) {
+            Toast.makeText(getContext(), "Vacation end date must be after start date", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
+    private void setupDatePickers() {
+        editTextStartDate.setOnClickListener(v -> showDatePickerDialog((EditText) v));
+        editTextEndDate.setOnClickListener(v -> showDatePickerDialog((EditText) v));
+    }
+
+    private void showDatePickerDialog(final EditText editText) {
+        final Calendar calendar = Calendar.getInstance();
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                getContext(),
+                (view, year, month, dayOfMonth) -> {
+                    calendar.set(Calendar.YEAR, year);
+                    calendar.set(Calendar.MONTH, month);
+                    calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                    SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.US);
+                    editText.setText(sdf.format(calendar.getTime()));
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+        );
+        datePickerDialog.show();
+    }
+
+    private boolean isValidDateRange(String startDate, String endDate) {
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.US);
+        try {
+            Date start = sdf.parse(startDate);
+            Date end = sdf.parse(endDate);
+            return end != null && !end.before(start);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), "Invalid date format", Toast.LENGTH_SHORT).show();
+            return false;
+        }
     }
 }
