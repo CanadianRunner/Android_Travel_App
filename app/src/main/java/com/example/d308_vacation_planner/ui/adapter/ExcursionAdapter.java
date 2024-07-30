@@ -18,6 +18,13 @@ public class ExcursionAdapter extends RecyclerView.Adapter<ExcursionAdapter.Excu
 
     private List<Excursion> excursions = new ArrayList<>();
     private ExcursionViewModel excursionViewModel;
+    private String vacationStartDate;
+    private String vacationEndDate;
+
+    public ExcursionAdapter(String vacationStartDate, String vacationEndDate) {
+        this.vacationStartDate = vacationStartDate;
+        this.vacationEndDate = vacationEndDate;
+    }
 
     @NonNull
     @Override
@@ -38,7 +45,7 @@ public class ExcursionAdapter extends RecyclerView.Adapter<ExcursionAdapter.Excu
         });
 
         holder.buttonEdit.setOnClickListener(v -> {
-            ((MainActivity) holder.itemView.getContext()).navigateToUpdateExcursion(currentExcursion);
+            ((MainActivity) holder.itemView.getContext()).navigateToUpdateExcursion(currentExcursion, vacationStartDate, vacationEndDate);
         });
     }
 

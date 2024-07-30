@@ -25,15 +25,24 @@ import java.util.Locale;
 public class UpdateExcursionFragment extends Fragment {
 
     private static final String ARG_EXCURSION = "arg_excursion";
+    private static final String ARG_VACATION_START_DATE = "arg_vacation_start_date";
+    private static final String ARG_VACATION_END_DATE = "arg_vacation_end_date";
+    private static final String DATE_FORMAT = "MM/dd/yy";
+
     private Excursion excursion;
     private ExcursionViewModel excursionViewModel;
     private EditText editTextTitle, editTextDate;
     private Button buttonSave;
 
-    public static UpdateExcursionFragment newInstance(Excursion excursion) {
+    private String vacationStartDate;
+    private String vacationEndDate;
+
+    public static UpdateExcursionFragment newInstance(Excursion excursion, String vacationStartDate, String vacationEndDate) {
         UpdateExcursionFragment fragment = new UpdateExcursionFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_EXCURSION, excursion);
+        args.putString(ARG_VACATION_START_DATE, vacationStartDate);
+        args.putString(ARG_VACATION_END_DATE, vacationEndDate);
         fragment.setArguments(args);
         return fragment;
     }
@@ -43,6 +52,8 @@ public class UpdateExcursionFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             excursion = (Excursion) getArguments().getSerializable(ARG_EXCURSION);
+            vacationStartDate = getArguments().getString(ARG_VACATION_START_DATE);
+            vacationEndDate = getArguments().getString(ARG_VACATION_END_DATE);
         }
     }
 
@@ -76,6 +87,11 @@ public class UpdateExcursionFragment extends Fragment {
                 return;
             }
 
+            if (!isDateWithinVacation(date, vacationStartDate, vacationEndDate)) {
+                Toast.makeText(getContext(), "Excursion date must be within vacation dates", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             if (excursion.getId() == 0) {
                 excursion = new Excursion(excursion.getVacationId(), title, date);
                 excursionViewModel.insert(excursion);
@@ -99,19 +115,32 @@ public class UpdateExcursionFragment extends Fragment {
             calendar.set(Calendar.YEAR, year);
             calendar.set(Calendar.MONTH, month);
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy", Locale.US);
+            SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.US);
             editText.setText(sdf.format(calendar.getTime()));
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();
     }
 
     private boolean isValidDate(String date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy", Locale.US);
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.US);
         sdf.setLenient(false);
         try {
             sdf.parse(date);
             return true;
         } catch (ParseException e) {
+            return false;
+        }
+    }
+
+    private boolean isDateWithinVacation(String date, String startDate, String endDate) {
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.US);
+        try {
+            Date excursionDate = sdf.parse(date);
+            Date vacationStartDate = sdf.parse(startDate);
+            Date vacationEndDate = sdf.parse(endDate);
+            return !excursionDate.before(vacationStartDate) && !excursionDate.after(vacationEndDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
             return false;
         }
     }

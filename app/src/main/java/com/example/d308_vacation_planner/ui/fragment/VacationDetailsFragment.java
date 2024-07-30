@@ -56,7 +56,7 @@ public class VacationDetailsFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
 
-        adapter = new ExcursionAdapter();
+        adapter = new ExcursionAdapter(vacation.getStartDate(), vacation.getEndDate());
         recyclerView.setAdapter(adapter);
 
         excursionViewModel = new ViewModelProvider(this).get(ExcursionViewModel.class);
@@ -69,7 +69,7 @@ public class VacationDetailsFragment extends Fragment {
         });
 
         buttonAddExcursion.setOnClickListener(v -> {
-            ((MainActivity) getActivity()).navigateToAddExcursion(vacation.getId());
+            ((MainActivity) getActivity()).navigateToAddExcursion(vacation.getId(), vacation.getStartDate(), vacation.getEndDate());
         });
 
         return view;

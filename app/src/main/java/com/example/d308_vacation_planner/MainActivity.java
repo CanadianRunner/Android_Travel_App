@@ -38,17 +38,17 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public void navigateToUpdateExcursion(Excursion excursion) {
-        UpdateExcursionFragment fragment = UpdateExcursionFragment.newInstance(excursion);
+    public void navigateToUpdateExcursion(Excursion excursion, String vacationStartDate, String vacationEndDate) {
+        UpdateExcursionFragment fragment = UpdateExcursionFragment.newInstance(excursion, vacationStartDate, vacationEndDate);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)
                 .commit();
     }
 
-    public void navigateToAddExcursion(int vacationId) {
+    public void navigateToAddExcursion(int vacationId, String vacationStartDate, String vacationEndDate) {
         Excursion newExcursion = new Excursion(vacationId, "", "");
-        UpdateExcursionFragment fragment = UpdateExcursionFragment.newInstance(newExcursion);
+        UpdateExcursionFragment fragment = UpdateExcursionFragment.newInstance(newExcursion, vacationStartDate, vacationEndDate);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)
