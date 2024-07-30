@@ -35,4 +35,8 @@ public class ExcursionRepository {
     public LiveData<List<Excursion>> getExcursionsForVacation(int vacationId) {
         return excursionDao.getExcursionsForVacation(vacationId);
     }
+
+    public LiveData<List<Excursion>> getAllExcursions() {
+        return excursionDao.getAllExcursions();
+    }
 }

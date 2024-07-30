@@ -11,10 +11,12 @@ import java.util.List;
 public class ExcursionViewModel extends AndroidViewModel {
 
     private final ExcursionRepository repository;
+    private final LiveData<List<Excursion>> allExcursions;
 
     public ExcursionViewModel(@NonNull Application application) {
         super(application);
         repository = new ExcursionRepository(application);
+        allExcursions = repository.getAllExcursions();
     }
 
     public void insert(Excursion excursion) {
@@ -27,6 +29,10 @@ public class ExcursionViewModel extends AndroidViewModel {
 
     public void delete(Excursion excursion) {
         repository.delete(excursion);
+    }
+
+    public LiveData<List<Excursion>> getAllExcursions() {
+        return allExcursions;
     }
 
     public LiveData<List<Excursion>> getExcursionsForVacation(int vacationId) {

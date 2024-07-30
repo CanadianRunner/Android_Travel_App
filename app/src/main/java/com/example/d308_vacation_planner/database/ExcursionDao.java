@@ -23,4 +23,7 @@ public interface ExcursionDao {
 
     @Query("SELECT * FROM excursion_table WHERE vacationId = :vacationId")
     LiveData<List<Excursion>> getExcursionsForVacation(int vacationId);
+
+    @Query("SELECT * FROM excursion_table")
+    LiveData<List<Excursion>> getAllExcursions();
 }
