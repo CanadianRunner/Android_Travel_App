@@ -1,6 +1,10 @@
 package com.example.d308_vacation_planner.ui.fragment;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.example.d308_vacation_planner.NotificationReceiver;
 import com.example.d308_vacation_planner.R;
 import com.example.d308_vacation_planner.model.Excursion;
 import com.example.d308_vacation_planner.viewmodel.ExcursionViewModel;
@@ -101,6 +106,15 @@ public class UpdateExcursionFragment extends Fragment {
                 excursionViewModel.update(excursion);
             }
 
+            SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.US);
+            try {
+                Date excursionDate = sdf.parse(date);
+                long excursionMillis = excursionDate.getTime();
+                scheduleNotification("Excursion Alert", "Excursion: " + title + " on " + date, excursionMillis);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
             getActivity().onBackPressed();
         });
 
@@ -143,5 +157,15 @@ public class UpdateExcursionFragment extends Fragment {
             e.printStackTrace();
             return false;
         }
+    }
+
+    private void scheduleNotification(String title, String message, long triggerAtMillis) {
+        Intent intent = new Intent(getContext(), NotificationReceiver.class);
+        intent.putExtra("title", title);
+        intent.putExtra("message", message);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent);
     }
 }
