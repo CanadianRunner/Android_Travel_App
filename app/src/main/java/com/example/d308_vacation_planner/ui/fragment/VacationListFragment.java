@@ -14,7 +14,9 @@ import com.example.d308_vacation_planner.R;
 import com.example.d308_vacation_planner.model.Vacation;
 import com.example.d308_vacation_planner.ui.adapter.VacationAdapter;
 import com.example.d308_vacation_planner.viewmodel.VacationViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
+import android.widget.TextView;
 
 public class VacationListFragment extends Fragment {
 
@@ -24,7 +26,10 @@ public class VacationListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_vacation_list, container, false);
 
-        RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_view_vacations);
+        TextView textViewNoVacations = view.findViewById(R.id.text_view_no_vacations);
+        FloatingActionButton fabAddVacation = view.findViewById(R.id.fab_add_vacation);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
 
@@ -37,12 +42,26 @@ public class VacationListFragment extends Fragment {
         vacationViewModel.getAllVacations().observe(getViewLifecycleOwner(), new Observer<List<Vacation>>() {
             @Override
             public void onChanged(List<Vacation> vacations) {
+                if (vacations.isEmpty()) {
+                    recyclerView.setVisibility(View.GONE);
+                    textViewNoVacations.setVisibility(View.VISIBLE);
+                } else {
+                    recyclerView.setVisibility(View.VISIBLE);
+                    textViewNoVacations.setVisibility(View.GONE);
+                }
                 adapter.setVacations(vacations);
             }
         });
 
         adapter.setOnItemClickListener(vacation -> {
             ((MainActivity) getActivity()).navigateToVacationDetails(vacation);
+        });
+
+        fabAddVacation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).navigateToUpdateVacation(null);
+            }
         });
 
         return view;

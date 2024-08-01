@@ -2,6 +2,7 @@ package com.example.d308_vacation_planner;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -15,6 +16,8 @@ import com.example.d308_vacation_planner.ui.fragment.ExcursionListFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         buttonViewVacations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "View Vacations button clicked");
                 navigateToVacationList();
             }
         });
@@ -33,55 +37,68 @@ public class MainActivity extends AppCompatActivity {
         buttonViewExcursions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "View Excursions button clicked");
                 navigateToExcursionList();
             }
         });
     }
 
     private void navigateToVacationList() {
+        Log.d(TAG, "Navigating to VacationListFragment");
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new VacationListFragment())
                 .addToBackStack(null)
                 .commit();
+        Log.d(TAG, "VacationListFragment transaction committed");
     }
 
     private void navigateToExcursionList() {
+        Log.d(TAG, "Navigating to ExcursionListFragment");
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new ExcursionListFragment())
                 .addToBackStack(null)
                 .commit();
+        Log.d(TAG, "ExcursionListFragment transaction committed");
     }
 
     public void navigateToUpdateVacation(Vacation vacation) {
+        Log.d(TAG, "Navigating to UpdateVacationFragment");
         UpdateVacationFragment fragment = UpdateVacationFragment.newInstance(vacation);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)
                 .commit();
+        Log.d(TAG, "UpdateVacationFragment transaction committed");
     }
 
     public void navigateToVacationDetails(Vacation vacation) {
+        Log.d(TAG, "Navigating to VacationDetailsFragment");
         VacationDetailsFragment fragment = VacationDetailsFragment.newInstance(vacation);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)
                 .commit();
+        Log.d(TAG, "VacationDetailsFragment transaction committed");
     }
 
     public void navigateToUpdateExcursion(Excursion excursion, String vacationStartDate, String vacationEndDate) {
+        Log.d(TAG, "Navigating to UpdateExcursionFragment");
         UpdateExcursionFragment fragment = UpdateExcursionFragment.newInstance(excursion, vacationStartDate, vacationEndDate);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)
                 .commit();
+        Log.d(TAG, "UpdateExcursionFragment transaction committed");
     }
 
     public void navigateToAddExcursion(int vacationId, String vacationStartDate, String vacationEndDate) {
+        Log.d(TAG, "Navigating to AddExcursionFragment");
         Excursion newExcursion = new Excursion(vacationId, "", "");
         UpdateExcursionFragment fragment = UpdateExcursionFragment.newInstance(newExcursion, vacationStartDate, vacationEndDate);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)
                 .commit();
+        Log.d(TAG, "AddExcursionFragment transaction committed");
     }
 }
