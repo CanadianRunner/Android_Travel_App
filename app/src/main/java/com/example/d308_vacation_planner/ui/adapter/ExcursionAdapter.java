@@ -7,7 +7,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.d308_vacation_planner.MainActivity;
 import com.example.d308_vacation_planner.R;
 import com.example.d308_vacation_planner.model.Excursion;
 import com.example.d308_vacation_planner.viewmodel.ExcursionViewModel;
@@ -22,10 +21,8 @@ public class ExcursionAdapter extends RecyclerView.Adapter<ExcursionAdapter.Excu
     private String vacationStartDate;
     private String vacationEndDate;
 
-    public ExcursionAdapter() {
-    }
-
-    public ExcursionAdapter(String vacationStartDate, String vacationEndDate) {
+    public ExcursionAdapter(ExcursionViewModel excursionViewModel, String vacationStartDate, String vacationEndDate) {
+        this.excursionViewModel = excursionViewModel;
         this.vacationStartDate = vacationStartDate;
         this.vacationEndDate = vacationEndDate;
     }
@@ -45,7 +42,9 @@ public class ExcursionAdapter extends RecyclerView.Adapter<ExcursionAdapter.Excu
         holder.textViewDate.setText(currentExcursion.getDate());
 
         holder.buttonDelete.setOnClickListener(v -> {
-            excursionViewModel.delete(currentExcursion);
+            if (excursionViewModel != null) {
+                excursionViewModel.delete(currentExcursion);
+            }
         });
 
         holder.buttonEdit.setOnClickListener(v -> {

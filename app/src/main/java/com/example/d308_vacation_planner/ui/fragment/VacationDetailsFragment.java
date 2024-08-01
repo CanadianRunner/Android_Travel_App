@@ -56,10 +56,9 @@ public class VacationDetailsFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
 
-        adapter = new ExcursionAdapter(vacation.getStartDate(), vacation.getEndDate());
-        recyclerView.setAdapter(adapter);
-
         excursionViewModel = new ViewModelProvider(this).get(ExcursionViewModel.class);
+        adapter = new ExcursionAdapter(excursionViewModel, vacation.getStartDate(), vacation.getEndDate());
+        recyclerView.setAdapter(adapter);
 
         excursionViewModel.getExcursionsForVacation(vacation.getId()).observe(getViewLifecycleOwner(), new Observer<List<Excursion>>() {
             @Override

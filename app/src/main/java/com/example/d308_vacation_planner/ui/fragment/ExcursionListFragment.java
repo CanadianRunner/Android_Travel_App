@@ -37,11 +37,10 @@ public class ExcursionListFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
 
-        final ExcursionAdapter adapter = new ExcursionAdapter();
-        recyclerView.setAdapter(adapter);
-
         excursionViewModel = new ViewModelProvider(this).get(ExcursionViewModel.class);
-        adapter.setExcursionViewModel(excursionViewModel);
+
+        final ExcursionAdapter adapter = new ExcursionAdapter(excursionViewModel, "01/01/22", "12/31/22");
+        recyclerView.setAdapter(adapter);
 
         excursionViewModel.getAllExcursions().observe(getViewLifecycleOwner(), new Observer<List<Excursion>>() {
             @Override

@@ -163,7 +163,7 @@ public class UpdateExcursionFragment extends Fragment {
         Intent intent = new Intent(getContext(), NotificationReceiver.class);
         intent.putExtra("title", title);
         intent.putExtra("message", message);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent);
