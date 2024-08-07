@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void navigateToUpdateExcursion(Excursion excursion, String vacationStartDate, String vacationEndDate) {
-        Log.d(TAG, "Navigating to UpdateExcursionFragment");
+        Log.d(TAG, "Navigating to UpdateExcursionFragment with Excursion: " + excursion.getExcursionName());
         UpdateExcursionFragment fragment = UpdateExcursionFragment.newInstance(excursion, vacationStartDate, vacationEndDate);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment)

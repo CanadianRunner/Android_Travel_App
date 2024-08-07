@@ -15,15 +15,22 @@ import android.widget.TextView;
 import com.example.d308_vacation_planner.MainActivity;
 import com.example.d308_vacation_planner.R;
 import com.example.d308_vacation_planner.model.Excursion;
+import com.example.d308_vacation_planner.model.Vacation;
 import com.example.d308_vacation_planner.ui.adapter.ExcursionAdapter;
 import com.example.d308_vacation_planner.viewmodel.ExcursionViewModel;
+import com.example.d308_vacation_planner.viewmodel.VacationViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ExcursionListFragment extends Fragment {
 
     private ExcursionViewModel excursionViewModel;
+    private VacationViewModel vacationViewModel;
     private TextView textViewNoExcursions;
+    private Map<Integer, Vacation> vacationMap = new HashMap<>();
 
     @Nullable
     @Override
@@ -38,9 +45,19 @@ public class ExcursionListFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
 
         excursionViewModel = new ViewModelProvider(this).get(ExcursionViewModel.class);
+        vacationViewModel = new ViewModelProvider(this).get(VacationViewModel.class);
 
-        final ExcursionAdapter adapter = new ExcursionAdapter(excursionViewModel, "01/01/22", "12/31/22");
+        final ExcursionAdapter adapter = new ExcursionAdapter(excursionViewModel, "", "");
         recyclerView.setAdapter(adapter);
+
+        vacationViewModel.getAllVacations().observe(getViewLifecycleOwner(), new Observer<List<Vacation>>() {
+            @Override
+            public void onChanged(List<Vacation> vacations) {
+                for (Vacation vacation : vacations) {
+                    vacationMap.put(vacation.getId(), vacation);
+                }
+            }
+        });
 
         excursionViewModel.getAllExcursions().observe(getViewLifecycleOwner(), new Observer<List<Excursion>>() {
             @Override
@@ -57,13 +74,20 @@ public class ExcursionListFragment extends Fragment {
         });
 
         adapter.setOnItemClickListener(excursion -> {
-            // Implement click logic here
+            Vacation associatedVacation = vacationMap.get(excursion.getVacationId());
+            if (associatedVacation != null) {
+                String vacationStartDate = associatedVacation.getStartDate();
+                String vacationEndDate = associatedVacation.getEndDate();
+                ((MainActivity) getActivity()).navigateToUpdateExcursion(excursion, vacationStartDate, vacationEndDate);
+            } else {
+                // Handle the case where the vacation is not found
+            }
         });
 
         fabAddExcursion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) getActivity()).navigateToAddExcursion(0, "", "");
+                ((MainActivity) getActivity()).navigateToAddExcursion(0, "01/01/24", "12/31/24");
             }
         });
 

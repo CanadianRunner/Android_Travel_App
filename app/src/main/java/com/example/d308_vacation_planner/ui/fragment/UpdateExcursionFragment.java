@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ import java.util.Locale;
 
 public class UpdateExcursionFragment extends Fragment {
 
+    private static final String TAG = "UpdateExcursionFragment";
     private static final String ARG_EXCURSION = "arg_excursion";
     private static final String ARG_VACATION_START_DATE = "arg_vacation_start_date";
     private static final String ARG_VACATION_END_DATE = "arg_vacation_end_date";
@@ -152,6 +154,11 @@ public class UpdateExcursionFragment extends Fragment {
             Date excursionDate = sdf.parse(date);
             Date vacationStartDate = sdf.parse(startDate);
             Date vacationEndDate = sdf.parse(endDate);
+
+            Log.d(TAG, "Excursion Date: " + excursionDate);
+            Log.d(TAG, "Vacation Start Date: " + vacationStartDate);
+            Log.d(TAG, "Vacation End Date: " + vacationEndDate);
+
             return !excursionDate.before(vacationStartDate) && !excursionDate.after(vacationEndDate);
         } catch (ParseException e) {
             e.printStackTrace();
