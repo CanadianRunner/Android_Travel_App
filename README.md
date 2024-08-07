@@ -65,7 +65,7 @@ _I created a Java project for my B.S. in Software Engineering that manages vacat
 
 ### Logic Flow of Built Application
 
-![LogicFlow](MobileAppStoryBoard.png)
+![LogicFlow](app/MobileAppStoryBoard.png)
 
 ## Deployment
 
