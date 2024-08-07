@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void navigateToUpdateVacation(Vacation vacation) {
-        Log.d(TAG, "Navigating to UpdateVacationFragment");
+        Log.d(TAG, vacation == null ? "Navigating to AddVacationFragment" : "Navigating to UpdateVacationFragment with Vacation: " + vacation.getTitle());
         UpdateVacationFragment fragment = UpdateVacationFragment.newInstance(vacation);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment)
@@ -72,7 +72,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void navigateToVacationDetails(Vacation vacation) {
-        Log.d(TAG, "Navigating to VacationDetailsFragment");
+        if (vacation == null) {
+            Log.e(TAG, "Vacation is null in navigateToVacationDetails");
+            return;
+        }
+        Log.d(TAG, "Navigating to VacationDetailsFragment with Vacation: " + vacation.getTitle());
         VacationDetailsFragment fragment = VacationDetailsFragment.newInstance(vacation);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment)
@@ -82,6 +86,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void navigateToUpdateExcursion(Excursion excursion, String vacationStartDate, String vacationEndDate) {
+        if (excursion == null) {
+            Log.e(TAG, "Excursion is null in navigateToUpdateExcursion");
+            return;
+        }
         Log.d(TAG, "Navigating to UpdateExcursionFragment with Excursion: " + excursion.getExcursionName());
         UpdateExcursionFragment fragment = UpdateExcursionFragment.newInstance(excursion, vacationStartDate, vacationEndDate);
         getSupportFragmentManager().beginTransaction()

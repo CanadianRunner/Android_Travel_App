@@ -10,8 +10,8 @@ import com.example.d308_vacation_planner.repository.VacationRepository;
 import java.util.List;
 
 public class VacationViewModel extends AndroidViewModel {
-    private VacationRepository repository;
-    private LiveData<List<Vacation>> allVacations;
+    private final VacationRepository repository;
+    private final LiveData<List<Vacation>> allVacations;
 
     public VacationViewModel(@NonNull Application application) {
         super(application);

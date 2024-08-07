@@ -9,8 +9,8 @@ import com.example.d308_vacation_planner.model.Vacation;
 import java.util.List;
 
 public class VacationRepository {
-    private VacationDao vacationDao;
-    private LiveData<List<Vacation>> allVacations;
+    private final VacationDao vacationDao;
+    private final LiveData<List<Vacation>> allVacations;
 
     public VacationRepository(Application application) {
         AppDatabase database = AppDatabase.getInstance(application);
@@ -32,9 +32,5 @@ public class VacationRepository {
 
     public void delete(Vacation vacation) {
         AppDatabase.databaseWriteExecutor.execute(() -> vacationDao.delete(vacation));
-    }
-
-    public LiveData<List<Vacation>> getVacations() {
-        return allVacations;
     }
 }

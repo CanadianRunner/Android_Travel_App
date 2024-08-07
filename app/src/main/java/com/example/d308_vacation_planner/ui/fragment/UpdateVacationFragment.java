@@ -59,8 +59,9 @@ public class UpdateVacationFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_update_vacation, container, false);
 
         initializeViews(view);
-        populateFields();
         vacationViewModel = new ViewModelProvider(this).get(VacationViewModel.class);
+        populateFields();
+
         buttonSave.setOnClickListener(v -> saveVacation());
         setupDatePickers();
         return view;
@@ -92,6 +93,8 @@ public class UpdateVacationFragment extends Fragment {
         if (!areFieldsValid(title, hotel, startDate, endDate)) {
             return;
         }
+
+        // Create or update the vacation object
         if (vacation == null) {
             vacation = new Vacation(title, startDate, endDate, hotel);
             vacationViewModel.insert(vacation);
@@ -112,7 +115,8 @@ public class UpdateVacationFragment extends Fragment {
             e.printStackTrace();
         }
 
-        getActivity().onBackPressed();
+        // Navigate back to the vacation list after saving
+        requireActivity().getSupportFragmentManager().popBackStack();
     }
 
     private boolean areFieldsValid(String title, String hotel, String startDate, String endDate) {

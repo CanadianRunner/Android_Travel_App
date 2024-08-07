@@ -71,6 +71,13 @@ public class VacationDetailsFragment extends Fragment {
             ((MainActivity) getActivity()).navigateToAddExcursion(vacation.getId(), vacation.getStartDate(), vacation.getEndDate());
         });
 
+        adapter.setOnItemClickListener(new ExcursionAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Excursion excursion) {
+                ((MainActivity) getActivity()).navigateToUpdateExcursion(excursion, vacation.getStartDate(), vacation.getEndDate());
+            }
+        });
+
         return view;
     }
 }
