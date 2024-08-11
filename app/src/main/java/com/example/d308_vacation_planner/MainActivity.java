@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "View Excursions button clicked");
-                navigateToExcursionList();
+                navigateToExcursionList(0);
             }
         });
     }
@@ -52,10 +52,11 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "VacationListFragment transaction committed");
     }
 
-    private void navigateToExcursionList() {
-        Log.d(TAG, "Navigating to ExcursionListFragment");
+    private void navigateToExcursionList(int vacationId) {
+        Log.d(TAG, "Navigating to ExcursionListFragment with Vacation ID: " + vacationId);
+        ExcursionListFragment fragment = ExcursionListFragment.newInstance(vacationId);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new ExcursionListFragment())
+                .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)
                 .commit();
         Log.d(TAG, "ExcursionListFragment transaction committed");

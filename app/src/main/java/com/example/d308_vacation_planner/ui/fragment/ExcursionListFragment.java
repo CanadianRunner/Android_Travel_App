@@ -27,10 +27,29 @@ import java.util.Map;
 
 public class ExcursionListFragment extends Fragment {
 
+    private static final String ARG_VACATION_ID = "vacation_id";
+    private int vacationId;
+
     private ExcursionViewModel excursionViewModel;
     private VacationViewModel vacationViewModel;
     private TextView textViewNoExcursions;
     private Map<Integer, Vacation> vacationMap = new HashMap<>();
+
+    public static ExcursionListFragment newInstance(int vacationId) {
+        ExcursionListFragment fragment = new ExcursionListFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_VACATION_ID, vacationId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            vacationId = getArguments().getInt(ARG_VACATION_ID);
+        }
+    }
 
     @Nullable
     @Override
@@ -59,7 +78,7 @@ public class ExcursionListFragment extends Fragment {
             }
         });
 
-        excursionViewModel.getAllExcursions().observe(getViewLifecycleOwner(), new Observer<List<Excursion>>() {
+        excursionViewModel.getExcursionsForVacation(vacationId).observe(getViewLifecycleOwner(), new Observer<List<Excursion>>() {
             @Override
             public void onChanged(List<Excursion> excursions) {
                 if (excursions.isEmpty()) {
@@ -79,15 +98,13 @@ public class ExcursionListFragment extends Fragment {
                 String vacationStartDate = associatedVacation.getStartDate();
                 String vacationEndDate = associatedVacation.getEndDate();
                 ((MainActivity) getActivity()).navigateToUpdateExcursion(excursion, vacationStartDate, vacationEndDate);
-            } else {
-                // Handle the case where the vacation is not found
             }
         });
 
         fabAddExcursion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) getActivity()).navigateToAddExcursion(0, "01/01/24", "12/31/24");
+                ((MainActivity) getActivity()).navigateToAddExcursion(vacationId, "01/01/24", "12/31/24");
             }
         });
 
