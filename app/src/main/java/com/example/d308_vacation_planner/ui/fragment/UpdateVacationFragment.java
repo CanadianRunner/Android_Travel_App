@@ -109,14 +109,33 @@ public class UpdateVacationFragment extends Fragment {
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.US);
         try {
             Date start = sdf.parse(startDate);
+            Date end = sdf.parse(endDate);
             long startMillis = start.getTime();
-            scheduleNotification("Vacation Alert", "Vacation: " + title + " starts on " + startDate, startMillis);
+            long endMillis = end.getTime();
+
+            scheduleNotification("Vacation Alert", "Vacation: " + title + " starts today", startMillis, 1);
+            scheduleNotification("Vacation Alert", "Vacation: " + title + " ends today", endMillis, 2);
+
+            // Uncomment the following lines for testing with a 40-second delay:
+            // long testDelayMillis = System.currentTimeMillis() + 40000;
+            // scheduleNotification("Vacation Alert", "Vacation: " + title + " starts now (testing)", testDelayMillis, 1);
+            // scheduleNotification("Vacation Alert", "Vacation: " + title + " ends now (testing)", testDelayMillis + 40000, 2);
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        // Navigate back to the vacation list after saving
         requireActivity().getSupportFragmentManager().popBackStack();
+    }
+
+    private void scheduleNotification(String title, String message, long triggerAtMillis, int requestCode) {
+        Intent intent = new Intent(getContext(), NotificationReceiver.class);
+        intent.putExtra("title", title);
+        intent.putExtra("message", message);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent);
     }
 
     private boolean areFieldsValid(String title, String hotel, String startDate, String endDate) {
@@ -167,15 +186,5 @@ public class UpdateVacationFragment extends Fragment {
             Toast.makeText(getContext(), "Invalid date format", Toast.LENGTH_SHORT).show();
             return false;
         }
-    }
-
-    private void scheduleNotification(String title, String message, long triggerAtMillis) {
-        Intent intent = new Intent(getContext(), NotificationReceiver.class);
-        intent.putExtra("title", title);
-        intent.putExtra("message", message);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-
-        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent);
     }
 }
