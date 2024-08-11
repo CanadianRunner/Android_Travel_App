@@ -12,7 +12,6 @@ import com.example.d308_vacation_planner.ui.fragment.UpdateExcursionFragment;
 import com.example.d308_vacation_planner.ui.fragment.UpdateVacationFragment;
 import com.example.d308_vacation_planner.ui.fragment.VacationDetailsFragment;
 import com.example.d308_vacation_planner.ui.fragment.VacationListFragment;
-import com.example.d308_vacation_planner.ui.fragment.ExcursionListFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,21 +23,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         Button buttonViewVacations = findViewById(R.id.button_view_vacations);
-        Button buttonViewExcursions = findViewById(R.id.button_view_excursions);
 
         buttonViewVacations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "View Vacations button clicked");
                 navigateToVacationList();
-            }
-        });
-
-        buttonViewExcursions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "View Excursions button clicked");
-                navigateToExcursionList(0);
             }
         });
     }
@@ -50,16 +40,6 @@ public class MainActivity extends AppCompatActivity {
                 .addToBackStack(null)
                 .commit();
         Log.d(TAG, "VacationListFragment transaction committed");
-    }
-
-    private void navigateToExcursionList(int vacationId) {
-        Log.d(TAG, "Navigating to ExcursionListFragment with Vacation ID: " + vacationId);
-        ExcursionListFragment fragment = ExcursionListFragment.newInstance(vacationId);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null)
-                .commit();
-        Log.d(TAG, "ExcursionListFragment transaction committed");
     }
 
     public void navigateToUpdateVacation(Vacation vacation) {

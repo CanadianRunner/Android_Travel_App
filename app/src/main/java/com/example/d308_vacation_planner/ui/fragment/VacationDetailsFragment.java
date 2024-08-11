@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import com.example.d308_vacation_planner.MainActivity;
 import com.example.d308_vacation_planner.R;
 import com.example.d308_vacation_planner.model.Excursion;
@@ -30,6 +31,8 @@ public class VacationDetailsFragment extends Fragment {
     private ExcursionAdapter adapter;
     private Button buttonAddExcursion;
     private Button buttonShareVacation;
+    private TextView textViewNoExcursions;
+    private TextView vacationTitleTextView;
 
     public static VacationDetailsFragment newInstance(Vacation vacation) {
         VacationDetailsFragment fragment = new VacationDetailsFragment();
@@ -52,9 +55,13 @@ public class VacationDetailsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_vacation_details, container, false);
 
+        vacationTitleTextView = view.findViewById(R.id.vacation_title);
+        textViewNoExcursions = view.findViewById(R.id.text_view_no_excursions);
         recyclerView = view.findViewById(R.id.recycler_view_excursions);
         buttonAddExcursion = view.findViewById(R.id.button_add_excursion);
         buttonShareVacation = view.findViewById(R.id.button_share_vacation);
+
+        vacationTitleTextView.setText(vacation.getTitle());
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
@@ -66,6 +73,13 @@ public class VacationDetailsFragment extends Fragment {
         excursionViewModel.getExcursionsForVacation(vacation.getId()).observe(getViewLifecycleOwner(), new Observer<List<Excursion>>() {
             @Override
             public void onChanged(List<Excursion> excursions) {
+                if (excursions.isEmpty()) {
+                    recyclerView.setVisibility(View.GONE);
+                    textViewNoExcursions.setVisibility(View.VISIBLE);
+                } else {
+                    recyclerView.setVisibility(View.VISIBLE);
+                    textViewNoExcursions.setVisibility(View.GONE);
+                }
                 adapter.setExcursions(excursions);
             }
         });
