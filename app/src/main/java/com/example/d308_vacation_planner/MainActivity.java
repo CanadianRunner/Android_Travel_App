@@ -1,6 +1,8 @@
 package com.example.d308_vacation_planner;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +28,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showHomeElements();
+            }
+        });
+
         Button buttonViewVacations = findViewById(R.id.button_view_vacations);
         homeImageView = findViewById(R.id.home_image);
         homeTextView = findViewById(R.id.text_home);
@@ -42,6 +54,12 @@ public class MainActivity extends AppCompatActivity {
     private void hideHomeElements() {
         homeImageView.setVisibility(View.GONE);
         homeTextView.setVisibility(View.GONE);
+    }
+
+    private void showHomeElements() {
+        homeImageView.setVisibility(View.VISIBLE);
+        homeTextView.setVisibility(View.VISIBLE);
+        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
     private void navigateToVacationList() {
@@ -106,13 +124,4 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
         Log.d(TAG, "AddExcursionFragment transaction committed");
     }
-
-//    @Override
-//    public void onBackPressed() {
-//        if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
-//            homeImageView.setVisibility(View.VISIBLE);
-//            homeTextView.setVisibility(View.VISIBLE);
-//        }
-//        super.onBackPressed();
-//    }
 }
