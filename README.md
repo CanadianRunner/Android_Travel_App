@@ -33,39 +33,45 @@ _I created a Java project for my B.S. in Software Engineering that manages vacat
 ## How to Operate the Application (refer to the below diagram)
 
 1. **Home Screen:**
-    - Use the buttons to navigate to the Vacation List Screen or the Excursion List Screen.
+    - Use the "View Vacations" button to navigate to the Vacation List Screen.
+    - The Home button is persistent throughout the app, allowing you to return to the Home Screen from any other screen.
 
 2. **Vacation List Screen:**
-    - View a list of all vacations.
-    - Add a new vacation using the FAB (Floating Action Button) at the bottom right.
-    - Edit or delete existing vacations using the respective buttons.
+   - View a list of all vacations.
+   - Each vacation shows its title, hotel, start date, and end date.
+   - Add a new vacation using the FAB (Floating Action Button) at the bottom right.
+   - Edit or delete existing vacations using the respective buttons.
 
-3. **Add/Edit Vacation Screen:**
-    - Enter the vacation title, hotel, start date, and end date.
-    - Save the vacation details.
+3. **Detailed Vacation View:**
+   - Access this view by clicking on a vacation in the list.
+   - View all details of the selected vacation, including the associated excursions.
+   - Add, edit, or delete excursions from this screen.
+   - Edit the vacation details or share the vacation via email, SMS, or clipboard.
 
-4. **Detailed Vacation View Screen:**
-    - View all details of a selected vacation.
-    - View a list of associated excursions.
-    - Add a new excursion using the button.
-    - Edit the vacation details using the button.
+4. **Excursion List Screen (Associated with a Vacation):**
+   - View a list of all excursions associated with the selected vacation.
+   - Each excursion shows its title and date.
+   - Add a new excursion using the button at the bottom of the screen.
+   - Edit or delete existing excursions using the respective buttons.
+   - Share the vacation's details using the share button.
 
-5. **Excursion List Screen:**
-    - View a list of all excursions.
-    - Add a new excursion using the FAB at the bottom right.
-    - Edit or delete existing excursions using the respective buttons.
+5. **Add/Edit Vacation Screen:**
+   - Enter the vacation title, hotel, start date, and end date.
+   - Save the vacation details.
+   - Validation ensures the end date is after the start date.
 
 6. **Add/Edit Excursion Screen:**
-    - Enter the excursion title and date.
-    - Save the excursion details.
+   - Enter the excursion title and date.
+   - Save the excursion details.
+   - Validation ensures the excursion date is within the vacation date range.
 
-7. **Detailed Excursion View Screen:**
-    - View all details of a selected excursion.
-    - Edit the excursion details using the button.
+7. **Share Vacation Screen:**
+   - Access the sharing options from the Detailed Vacation View or the Excursion List Screen.
+   - The vacation details will be automatically populated for sharing via email, SMS, or clipboard.
 
 ### Logic Flow of Built Application
 
-![LogicFlow](app/MobileAppStoryBoard.png)
+![LogicFlow](app/Storyboard3.jpeg)
 
 ## Deployment
 
