@@ -22,6 +22,16 @@
         app:layout_constraintTop_toBottomOf="@id/recycler_view_excursions"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/button_share_vacation" />
+
+    <Button
+        android:id="@+id/button_share_vacation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Share Vacation"
+        app:layout_constraintTop_toBottomOf="@id/button_add_excursion"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -64,6 +64,10 @@ public class ExcursionAdapter extends RecyclerView.Adapter<ExcursionAdapter.Excu
         notifyDataSetChanged();
     }
 
+    public List<Excursion> getExcursions() {
+        return excursions;
+    }
+
     public void setExcursionViewModel(ExcursionViewModel excursionViewModel) {
         this.excursionViewModel = excursionViewModel;
     }

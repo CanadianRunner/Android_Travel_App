@@ -1,5 +1,6 @@
 package com.example.d308_vacation_planner.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,6 +29,7 @@ public class VacationDetailsFragment extends Fragment {
     private RecyclerView recyclerView;
     private ExcursionAdapter adapter;
     private Button buttonAddExcursion;
+    private Button buttonShareVacation;
 
     public static VacationDetailsFragment newInstance(Vacation vacation) {
         VacationDetailsFragment fragment = new VacationDetailsFragment();
@@ -52,6 +54,7 @@ public class VacationDetailsFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recycler_view_excursions);
         buttonAddExcursion = view.findViewById(R.id.button_add_excursion);
+        buttonShareVacation = view.findViewById(R.id.button_share_vacation);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
@@ -78,6 +81,28 @@ public class VacationDetailsFragment extends Fragment {
             }
         });
 
+        buttonShareVacation.setOnClickListener(v -> shareVacationDetails());
+
         return view;
+    }
+
+    private void shareVacationDetails() {
+        String vacationDetails = "Vacation: " + vacation.getTitle() + "\n" +
+                "Hotel: " + vacation.getHotel() + "\n" +
+                "Start Date: " + vacation.getStartDate() + "\n" +
+                "End Date: " + vacation.getEndDate() + "\n" +
+                "Excursions:\n";
+
+        for (Excursion excursion : adapter.getExcursions()) {
+            vacationDetails += " - " + excursion.getExcursionName() + " on " + excursion.getDate() + "\n";
+        }
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, vacationDetails);
+        sendIntent.setType("text/plain");
+
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        startActivity(shareIntent);
     }
 }
